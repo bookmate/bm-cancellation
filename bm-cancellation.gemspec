@@ -21,11 +21,14 @@ Gem::Specification.new do |spec|
   spec.metadata['changelog_uri'] = "#{spec.homepage}/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
+    `git ls-files -z`
+      .split("\x0")
+      .reject { |f| f.match(%r{\A(?:test|spec|features|benches|examples)/}) }
+      .reject { |f| f.match(/\A(?:CODE_OF_CONDUCT|Gemfile|Rakefile)/) }
+      .reject { |f| f.match(/\A\./) }
   end
 
+  spec.extensions    = spec.files.grep(%r{/extconf\.rb\Z})
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
-
-  spec.add_dependency 'concurrent-ruby', '~> 1.1'
 end

@@ -3,10 +3,20 @@
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
+require 'rake/extensiontask'
 
 RSpec::Core::RakeTask.new(:spec)
+
 RuboCop::RakeTask.new
+
+Rake::ExtensionTask.new 'bm_cancellation_atomic_bool' do |ext|
+  ext.lib_dir = 'lib/bm_cancellation_atomic_bool'
+end
 
 task default: %i[spec]
 
 task ci: %i[rubocop spec]
+
+task :bench do
+  sh 'ruby benches/atomic_bool.rb'
+end
