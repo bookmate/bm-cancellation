@@ -11,11 +11,11 @@ module BM
 
     ONE_YEAR = (365 * 24 * 3_600).to_f
 
-    # @return [SignalControl]
-    def self.signal(name)
-      control = Control.new
-      cancellation = Signal.new(name: name, control: control)
-      SignalControl.new(cancellation: cancellation, control: control)
+    # @return [(Cancellation, Control)]
+    def self.cancel(name)
+      control, atomic = Control.new
+      cancellation = Cancel.new(name: name, atomic: atomic)
+      [cancellation, control]
     end
 
     # @param name [String]
@@ -134,4 +134,4 @@ module BM
   end
 end
 
-require 'bm/cancellation/signal'
+require 'bm/cancellation/cancel'

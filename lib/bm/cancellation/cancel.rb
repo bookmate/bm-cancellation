@@ -1,0 +1,71 @@
+# frozen_string_literal: true
+
+module BM
+  class Cancellation
+    # Signals a cancel event to associated cancellation
+    #
+    # @example
+    #   cancellation, control = BM::Cancellation.cancel('MyWork')
+    #   Signal.tap('INT') { control.done }
+    class Control
+      # @api private
+      def initialize
+        @atomic = AtomicBool.new(false)
+      end
+
+      # @api private
+      def to_ary
+        [self, @atomic]
+      end
+
+      # Finishes and fire a cancel event to associated cancellation. Safe to call multiple times from
+      # multiple threads.
+      #
+      # @return [Boolean] true when invoked the 1st time
+      def done
+        @atomic.swap(false, true)
+      end
+    end
+
+    # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
+    # finished.
+    #
+    # @example
+    #   cancellation, control = BM::Cancellation.cancel('MyWork')
+    #   Signal.trap('INT') { control.done }
+    #
+    #   do_work until cancellation.cancelled?
+    #
+    # @attr [String] name is a name of cancellation
+    class Cancel < Cancellation
+      attr_reader :name
+
+      # @param name [String]
+      # @param atomic [AtomicBool]
+      #
+      # @api private
+      def initialize(name:, atomic:)
+        super()
+        @name = name
+        @atomic = atomic
+      end
+
+      # Is the cancellation cancelled
+      #
+      # @return [Boolean]
+      def cancelled?
+        @atomic.fetch
+      end
+
+      # Raises an {ExecutionCancelled} exception if the cancellation cancelled.
+      #
+      # @raise [ExecutionCancelled]
+      # @return [nil]
+      def check!
+        return unless cancelled?
+
+        raise ExecutionCancelled, "Execution [#{name}] cancelled"
+      end
+    end
+  end
+end
