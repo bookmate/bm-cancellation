@@ -12,10 +12,10 @@ module BM
     #
     # @see https://en.cppreference.com/w/c/atomic
     #
-    # @!method initialize(value)
+    # @!method initialize(initial_value)
     #   Creates a new atomic which initial value
     #
-    #   @param value [Boolean]
+    #   @param initial_value [Boolean]
     #   @api private
     #
     # @!method fetch

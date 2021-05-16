@@ -7,6 +7,11 @@ gemspec
 gem 'rake', '~> 13.0'
 gem 'rake-compiler', '~> 1.1'
 
+group :docs do
+  gem 'yard'
+  gem 'sord', '~> 3.0.1'
+end
+
 group :tests do
   gem 'rspec', '~> 3.0'
   gem 'rspec_junit_formatter', '= 0.4.1'

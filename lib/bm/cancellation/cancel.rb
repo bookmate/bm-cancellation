@@ -17,6 +17,7 @@ module BM
 
       # Destructing to an array
       #
+      # @return [(Control, AtomicBool)]
       # @api private
       def to_ary
         [self, @atomic]
