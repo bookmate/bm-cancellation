@@ -6,14 +6,14 @@ module BM
     #
     # @example
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
-    #   Signal.tap('INT') { control.done }
+    #   Signal.trap('INT') { control.done }
     class Control
       # @api private
       def initialize
         @atomic = AtomicBool.new(false)
       end
 
-      # @api private
+      # Destructing to an array
       def to_ary
         [self, @atomic]
       end
@@ -36,7 +36,7 @@ module BM
     #
     #   do_work until cancellation.cancelled?
     #
-    # @attr [String] name is a name of cancellation
+    # @attr [String] name of the cancellation
     class Cancel < Cancellation
       attr_reader :name
 
@@ -46,7 +46,7 @@ module BM
       # @api private
       def initialize(name:, atomic:)
         super()
-        @name = name
+        @name = name.freeze
         @atomic = atomic
       end
 
@@ -57,9 +57,9 @@ module BM
         @atomic.fetch
       end
 
-      # Raises an {ExecutionCancelled} exception if the cancellation cancelled.
+      # Checks that the cancellation is cancelled
       #
-      # @raise [ExecutionCancelled]
+      # @raise [ExecutionCancelled] raises when the cancellation cancelled.
       # @return [nil]
       def check!
         return unless cancelled?
