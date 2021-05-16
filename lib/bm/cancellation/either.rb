@@ -47,10 +47,8 @@ module BM
         [@left.expires_after, @right.expires_after].min
       end
 
-      # The name is depending on what cancellation is cancelled.
-      #
-      # If the right return a right's name or if it's the left return a left's name,
-      # otherwise return a combined name.
+      # The name is depending on what cancellation is cancelled. If the right return a right's name
+      # or if it's the left return a left's name, otherwise return a combined name.
       #
       # @return [String]
       def name

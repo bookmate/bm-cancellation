@@ -14,12 +14,13 @@ module BM
       # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
       # has done.
       #
-      # @example
+      # @example Usage
       #   cancellation, control = BM::Cancellation.cancel('MyWork')
       #   Signal.trap('INT') { control.done }
       #
       #   do_work until cancellation.cancelled?
       #
+      # @param name [String] is a name of cancellation
       # @return [(Cancellation, Control)] a cancellation and its control handler
       def cancel(name)
         control, atomic = Control.new
@@ -29,17 +30,17 @@ module BM
 
       # A cancellation object that expires after certain period of time.
       #
-      # @example
+      # @example Usage
       #   cancellation = BM::Cancellation.timeout('MyWork', seconds: seconds)
       #   do_work until cancellation.cancelled?
       #
-      # @example joins with another cancellation
+      # @example Joins with another cancellation
       #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
       #     do_work until timeout.expired?
       #   end
       #
-      # @param name [String]
-      # @param seconds [Numeric]
+      # @param name [String] is a name of cancellation
+      # @param seconds [Numeric] is a number seconds after the timeout will be expired
       # @param clock [#time] override a time source (non public)
       # @return [Cancellation]
       def timeout(name, seconds:, clock: Deadline::Clock)

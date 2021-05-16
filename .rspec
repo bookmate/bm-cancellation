@@ -1,3 +1,5 @@
---format p
+--format progress
+--format RspecJunitFormatter
+--out spec/reports/junit/report.xml
 --color
 --require spec_helper

@@ -4,7 +4,7 @@ module BM
   class Cancellation
     # Signals a cancel event to associated cancellation
     #
-    # @example
+    # @example Usage
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
     #   Signal.trap('INT') { control.done }
     #
@@ -16,6 +16,8 @@ module BM
       end
 
       # Destructing to an array
+      #
+      # @api private
       def to_ary
         [self, @atomic]
       end
@@ -32,7 +34,7 @@ module BM
     # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
     # has done.
     #
-    # @example
+    # @example Usage
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
     #   Signal.trap('INT') { control.done }
     #

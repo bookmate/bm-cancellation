@@ -4,11 +4,11 @@ module BM
   class Cancellation
     # A cancellation object that expires after certain period of time.
     #
-    # @example
+    # @example Usage
     #   timeout = BM::Cancellation.timeout('MyWork', seconds: seconds)
     #   do_work until timeout.expired?
     #
-    # @example joins with another cancellation
+    # @example Joins with another cancellation
     #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
     #     do_work until timeout.expired?
     #   end

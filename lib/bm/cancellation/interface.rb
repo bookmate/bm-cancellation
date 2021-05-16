@@ -2,11 +2,20 @@
 
 module BM
   # Interface methods for cancellations
+  #
+  # @!method cancelled?
+  #   Is the cancellation cancelled
+  #   @return [Boolean] the current status: cancelled or not
+  #
+  # @!method check!
+  #   Checks that the current cancellation is cancelled or not
+  #   @raise [ExecutionCancelled] when the cancellation is cancelled
+  #   @return [nil]
   class Cancellation
-    # Raised by {#check} when a cancellation is cancelled
+    # Raised by {Cancellation#check!} when a cancellation is cancelled
     ExecutionCancelled = Class.new(RuntimeError)
 
-    # Raised by #{check!} when a deadline cancellation is expired
+    # Raised by #{Cancellation#check!} when a deadline cancellation is expired
     DeadlineExpired = Class.new(ExecutionCancelled)
 
     # The number of seconds in the one year
@@ -14,27 +23,17 @@ module BM
 
     # Combines the cancellation with another that expired after given seconds.
     #
+    # @example Usage with another cancellation
+    #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
+    #     do_work until timeout.expired?
+    #   end
+    #
     # @param name [String] is a timeout's name
     # @param seconds [Numeric] is a number of seconds when timeout becomes expired
     #
     # @return [Cancellation]
     def with_timeout(name, seconds:)
       self | self.class.timeout(name, seconds: seconds)
-    end
-
-    # Is the cancellation cancelled
-    #
-    # @return [Boolean] the current status: cancelled or not
-    def cancelled?
-      raise ArgumentError, 'not implemented'
-    end
-
-    # Checks that the current cancellation is cancelled
-    #
-    # @raise [ExecutionCancelled] when the cancellation is cancelled
-    # @return [nil]
-    def check!
-      raise ArgumentError, 'not implemented'
     end
 
     # Returns a number of remaining seconds for this cancellation,

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require 'bm/cancellation'
+require 'bundler/setup'
+
+require_relative 'support/simplecov_start' unless ENV.fetch('SIMPLECOV', '').empty?
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
