@@ -7,7 +7,12 @@ require 'rake/extensiontask'
 
 RSpec::Core::RakeTask.new(:spec)
 
-RuboCop::RakeTask.new
+RuboCop::RakeTask.new :rubocop do |t|
+  formatters = %w[--format progress --format RuboCop::Formatter::CheckstyleFormatter]
+  requires = %w[--require rubocop/formatter/checkstyle_formatter]
+  out = %w[--out spec/reports/checkstyle/rubocop.xml]
+  t.options = requires + formatters + out
+end
 
 Rake::ExtensionTask.new 'bm_cancellation_atomic_bool' do |ext|
   ext.lib_dir = 'lib/bm_cancellation_atomic_bool'
