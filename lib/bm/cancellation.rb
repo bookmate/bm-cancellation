@@ -8,7 +8,7 @@ require 'bm/cancellation/deadline'
 require 'bm/cancellation/either'
 
 module BM
-  # Provides tools for cooperative cancellation
+  # Provides tools for cooperative cancellation and timeouts management.
   module Cancellation
     class << self
       # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}

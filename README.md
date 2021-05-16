@@ -1,10 +1,6 @@
 # Bm::Cancellation
 
-Provides tools for cooperative cancellation.
-
-### Motivation
-
-
+Provides tools for cooperative cancellation and timeouts management.
 
 ## Installation
 
@@ -40,7 +36,6 @@ cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
   do_work until timeout.expired?
 end
 ```
-
 For more complex cases see [examples directory][examples].
 
 ## Development
