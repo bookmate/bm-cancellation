@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module BM
+  # Interface methods for cancellations
   class Cancellation
     # Raised by {#check} when a cancellation is cancelled
     ExecutionCancelled = Class.new(RuntimeError)
@@ -11,7 +12,7 @@ module BM
     # The number of seconds in the one year
     EXPIRES_AFTER_MAX = (365 * 24 * 3_600).to_f
 
-    # Combines the cancellation with a timeout
+    # Combines the cancellation with another that expired after given seconds.
     #
     # @param name [String] is a timeout's name
     # @param seconds [Numeric] is a number of seconds when timeout becomes expired

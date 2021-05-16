@@ -7,6 +7,8 @@ module BM
     # @example
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
     #   Signal.trap('INT') { control.done }
+    #
+    #   do_work until cancellation.cancelled?
     class Control
       # @api private
       def initialize
@@ -28,7 +30,7 @@ module BM
     end
 
     # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
-    # finished.
+    # has done.
     #
     # @example
     #   cancellation, control = BM::Cancellation.cancel('MyWork')

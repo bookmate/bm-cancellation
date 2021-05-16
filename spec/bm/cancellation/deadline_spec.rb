@@ -8,6 +8,12 @@ RSpec.describe BM::Cancellation::Deadline do
   let(:timeout) { 2 }
   let(:clock) { Struct.new(:time).new(0) }
 
+  context 'when created' do
+    it 'does not to be expired' do
+      expect(deadline).not_to be_expired
+    end
+  end
+
   describe '#cancelled?' do
     it 'returns the current state of a cancellation' do
       expect { clock.time = timeout + 1 }.to change(deadline, :cancelled?).from(false).to(true)

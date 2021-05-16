@@ -4,6 +4,15 @@ module BM
   class Cancellation
     # A cancellation object that expires after certain period of time.
     #
+    # @example
+    #   timeout = BM::Cancellation.timeout('MyWork', seconds: seconds)
+    #   do_work until timeout.expired?
+    #
+    # @example joins with another cancellation
+    #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
+    #     do_work until timeout.expired?
+    #   end
+    #
     # @attr [String] name of the cancellation
     class Deadline < Cancellation
       attr_reader :name
@@ -27,6 +36,7 @@ module BM
       def cancelled?
         @after < @clock.time
       end
+      alias expired? cancelled?
 
       # Checks that the current deadline is expired
       #

@@ -11,7 +11,8 @@ module BM
   # Provides tools for cooperative cancellation
   class Cancellation
     class << self
-      # Creates a new cancellation
+      # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
+      # has done.
       #
       # @example
       #   cancellation, control = BM::Cancellation.cancel('MyWork')
@@ -26,11 +27,16 @@ module BM
         [cancellation, control].map(&:freeze)
       end
 
-      # Creates a cancellation will be expire after certain period of time
+      # A cancellation object that expires after certain period of time.
       #
       # @example
-      #   deadline = BM::Cancellation.timeout('Request', seconds: 2)
-      #   do_request_with(deadline)
+      #   cancellation = BM::Cancellation.timeout('MyWork', seconds: seconds)
+      #   do_work until cancellation.cancelled?
+      #
+      # @example joins with another cancellation
+      #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
+      #     do_work until timeout.expired?
+      #   end
       #
       # @param name [String]
       # @param seconds [Numeric]

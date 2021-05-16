@@ -5,3 +5,7 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - "spec/bm/cancellation/**/*_spec.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "benches/*.rb"
