@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BM
-  class Cancellation
+  module Cancellation
     # A boolean value that can be updated atomically. Reads and writes to an atomic boolean
     # and thread-safe and guaranteed to succeed.
     #

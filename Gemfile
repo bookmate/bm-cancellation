@@ -9,7 +9,7 @@ gem 'rake-compiler', '~> 1.1'
 
 group :docs do
   gem 'yard'
-  gem 'sord', '~> 3.0.1'
+  gem 'redcarpet', '~> 3.5'
 end
 
 group :tests do

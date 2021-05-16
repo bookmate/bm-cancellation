@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BM
-  class Cancellation
+  module Cancellation
     # Signals a cancel event to associated cancellation
     #
     # @example Usage
@@ -42,7 +42,9 @@ module BM
     #   do_work until cancellation.cancelled?
     #
     # @attr [String] name of the cancellation
-    class Cancel < Cancellation
+    class Cancel
+      include Cancellation
+
       attr_reader :name
 
       # @param name [String]
@@ -50,7 +52,6 @@ module BM
       #
       # @api private
       def initialize(name:, atomic:)
-        super()
         @name = name.freeze
         @atomic = atomic
       end

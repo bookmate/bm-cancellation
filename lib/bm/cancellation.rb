@@ -9,7 +9,7 @@ require 'bm/cancellation/either'
 
 module BM
   # Provides tools for cooperative cancellation
-  class Cancellation
+  module Cancellation
     class << self
       # A cancellation object backed by atomic boolean. Becomes cancelled when an associated {Control}
       # has done.

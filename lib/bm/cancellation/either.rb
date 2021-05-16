@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BM
-  class Cancellation
+  module Cancellation
     # Combination of the left and the right cancellations it behaves like an ordinary cancellation.
     #
     # @!attribute left [r]
@@ -11,7 +11,9 @@ module BM
     # @!attribute right [r]
     #   @return [Cancellation]
     #   @api private
-    class Either < Cancellation
+    class Either
+      include Cancellation
+
       attr_reader :left, :right
 
       # @param left [Cancellation]
@@ -19,7 +21,6 @@ module BM
       #
       # @api private
       def initialize(left:, right:)
-        super()
         @left = left
         @right = right
         @name = "(#{left.name} | #{right.name})"

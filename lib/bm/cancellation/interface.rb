@@ -2,16 +2,7 @@
 
 module BM
   # Interface methods for cancellations
-  #
-  # @!method cancelled?
-  #   Is the cancellation cancelled
-  #   @return [Boolean] the current status: cancelled or not
-  #
-  # @!method check!
-  #   Checks that the current cancellation is cancelled or not
-  #   @raise [ExecutionCancelled] when the cancellation is cancelled
-  #   @return [nil]
-  class Cancellation
+  module Cancellation
     # Raised by {Cancellation#check!} when a cancellation is cancelled
     ExecutionCancelled = Class.new(RuntimeError)
 
@@ -20,6 +11,11 @@ module BM
 
     # The number of seconds in the one year
     EXPIRES_AFTER_MAX = (365 * 24 * 3_600).to_f
+
+    # Is the cancellation cancelled
+    #
+    # @return [Boolean]
+    def cancelled? ; false end
 
     # Combines the cancellation with another that expired after given seconds.
     #
@@ -33,18 +29,7 @@ module BM
     #
     # @return [Cancellation]
     def with_timeout(name, seconds:)
-      self | self.class.timeout(name, seconds: seconds)
-    end
-
-    # Returns a number of remaining seconds for this cancellation,
-    #
-    # Possible values:
-    # - `0` if the cancellation is expired
-    # - `MAX_TIME` if the cancellation is not depending on time sources
-    #
-    # @return [Float]
-    def expires_after
-      EXPIRES_AFTER_MAX
+      self | Cancellation.timeout(name, seconds: seconds)
     end
 
     # Combines the cancellation with another using {Either}
@@ -55,5 +40,20 @@ module BM
       Either.new(left: self, right: other).freeze
     end
     alias | or_else
+
+    # Checks that the current cancellation is cancelled or not
+    #
+    # @raise [ExecutionCancelled] when the cancellation is cancelled
+    # @return [nil]
+    def check! ; nil end
+
+    # Returns a number of remaining seconds for this cancellation,
+    #
+    # Possible values:
+    # - `0` if the cancellation is expired
+    # - `MAX_TIME` if the cancellation is not depending on time sources
+    #
+    # @return [Float]
+    def expires_after ; EXPIRES_AFTER_MAX end
   end
 end

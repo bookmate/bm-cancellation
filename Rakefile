@@ -4,8 +4,16 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'rake/extensiontask'
+require 'yard'
 
 RSpec::Core::RakeTask.new(:spec)
+
+YARD::Rake::YardocTask.new(:yard) do |t|
+  t.options = %w[
+    --markup markdown
+    --markup-provider redcarpet
+  ]
+end
 
 RuboCop::RakeTask.new :rubocop do |t|
   formatters = %w[--format progress --format RuboCop::Formatter::CheckstyleFormatter]

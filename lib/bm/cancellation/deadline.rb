@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BM
-  class Cancellation
+  module Cancellation
     # A cancellation object that expires after certain period of time.
     #
     # @example Usage
@@ -14,7 +14,9 @@ module BM
     #   end
     #
     # @attr [String] name of the cancellation
-    class Deadline < Cancellation
+    class Deadline
+      include Cancellation
+
       attr_reader :name
 
       # @param name [String]
