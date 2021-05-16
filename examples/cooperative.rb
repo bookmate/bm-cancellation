@@ -69,7 +69,7 @@ end
 # Run the pipeline and stop it on `SIGINT` or after 10s
 #
 cancellation = BM::Cancellation.cancel('Signal').then do |(cancel, control)|
-  Signal.trap('INT') { control.done }
+  Signal.trap('INT', &control)
   cancel.with_timeout('Timeout', seconds: 10)
 end
 

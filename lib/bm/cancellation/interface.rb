@@ -15,7 +15,9 @@ module BM
     # Is the cancellation cancelled
     #
     # @return [Boolean]
-    def cancelled? ; false end
+    def cancelled?
+      false
+    end
 
     # Combines the cancellation with another that expired after given seconds.
     #
@@ -45,7 +47,9 @@ module BM
     #
     # @raise [ExecutionCancelled] when the cancellation is cancelled
     # @return [nil]
-    def check! ; nil end
+    def check!
+      nil
+    end
 
     # Returns a number of remaining seconds for this cancellation,
     #
@@ -54,6 +58,8 @@ module BM
     # - `MAX_TIME` if the cancellation is not depending on time sources
     #
     # @return [Float]
-    def expires_after ; EXPIRES_AFTER_MAX end
+    def expires_after
+      EXPIRES_AFTER_MAX
+    end
   end
 end

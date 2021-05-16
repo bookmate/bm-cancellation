@@ -16,7 +16,7 @@ module BM
       #
       # @example Usage
       #   cancellation, control = BM::Cancellation.cancel('MyWork')
-      #   Signal.trap('INT') { control.done }
+      #   Signal.trap('INT', &control)
       #
       #   do_work until cancellation.cancelled?
       #

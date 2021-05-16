@@ -1,6 +1,10 @@
 # Bm::Cancellation
 
-Provides tools for cooperative cancellation
+Provides tools for cooperative cancellation.
+
+### Motivation
+
+
 
 ## Installation
 
@@ -20,7 +24,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Works until a `SIGINT` signal received:
+```ruby
+cancellation, control = BM::Cancellation.cancel('MyWork')
+Signal.trap('INT', &control)
+do_work until cancellation.cancelled?
+```
+
+Works until a `SIGINT` signal received or a timeout expired:
+```ruby
+cancellation, control = BM::Cancellation.cancel('MyWork')
+Signal.trap('INT', &control)
+
+cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|   
+  do_work until timeout.expired?
+end
+```
+
+For more complex cases see [examples directory][examples].
 
 ## Development
 
@@ -41,3 +62,4 @@ Everyone interacting in the Bm::Cancellation project's codebases, issue trackers
 [issues]: https://github.com/bookmate/bm-cancellation/issues
 [code_of_conduct]: https://github.com/bookmate/bm-cancellation/blob/master/CODE_OF_CONDUCT.md
 [mit_license]: https://opensource.org/licenses/MIT
+[examples]: https://github.com/bookmate/bm-cancellation/tree/master/examples

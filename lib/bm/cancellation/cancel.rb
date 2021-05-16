@@ -6,7 +6,7 @@ module BM
     #
     # @example Usage
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
-    #   Signal.trap('INT') { control.done }
+    #   Signal.trap('INT', &control)
     #
     #   do_work until cancellation.cancelled?
     class Control
@@ -23,6 +23,16 @@ module BM
         [self, @atomic]
       end
 
+      # Converts to proc
+      #
+      # @example Trap a signal
+      #   Signal.trap('INT', &control)
+      #
+      # @return [Proc]
+      def to_proc
+        ->(*_args, **_kwargs) { done }
+      end
+
       # Finishes and fire a cancel event to associated cancellation. Safe to call multiple times from
       # multiple threads.
       #
@@ -37,7 +47,7 @@ module BM
     #
     # @example Usage
     #   cancellation, control = BM::Cancellation.cancel('MyWork')
-    #   Signal.trap('INT') { control.done }
+    #   Signal.trap('INT', &control)
     #
     #   do_work until cancellation.cancelled?
     #

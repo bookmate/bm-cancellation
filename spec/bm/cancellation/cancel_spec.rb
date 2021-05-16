@@ -16,6 +16,12 @@ RSpec.describe BM::Cancellation::Cancel do
     end
   end
 
+  describe 'a control handler' do
+    it 'converts to proc' do
+      expect { [1].each(&control) }.to change(cancel, :cancelled?).to(true)
+    end
+  end
+
   describe '#cancelled?' do
     it 'returns the current state of a cancellation' do
       expect { control.done }.to change(cancel, :cancelled?).from(false).to(true)

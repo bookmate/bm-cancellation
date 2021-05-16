@@ -8,7 +8,7 @@ require 'yard'
 
 RSpec::Core::RakeTask.new(:spec)
 
-YARD::Rake::YardocTask.new(:yard) do |t|
+YARD::Rake::YardocTask.new do |t|
   t.options = %w[
     --markup markdown
     --markup-provider redcarpet

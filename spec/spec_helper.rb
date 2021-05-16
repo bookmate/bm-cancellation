@@ -2,11 +2,13 @@
 
 require 'bundler/setup'
 
-require_relative 'support/simplecov_start' unless ENV.fetch('SIMPLECOV', '').empty?
+require_relative 'setup/simplecov'
+require_relative 'setup/rspec_formatters'
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
   config.disable_monkey_patching!
+  config.order = :random
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
