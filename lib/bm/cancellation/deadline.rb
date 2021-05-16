@@ -28,9 +28,9 @@ module BM
         @after < @clock.time
       end
 
-      # Is the current deadline expired
+      # Checks that the current deadline is expired
       #
-      # @raise [DeadlineExpired] when the current deadline or timeout expired
+      # @raise [DeadlineExpired] when the current deadline is expired
       # @return [nil]
       def check!
         return unless cancelled?

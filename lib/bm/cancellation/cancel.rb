@@ -57,9 +57,9 @@ module BM
         @atomic.fetch
       end
 
-      # Checks that the cancellation is cancelled
+      # Checks that the current cancellation is cancelled
       #
-      # @raise [ExecutionCancelled] raises when the cancellation cancelled.
+      # @raise [ExecutionCancelled] raises when the cancellation cancelled
       # @return [nil]
       def check!
         return unless cancelled?

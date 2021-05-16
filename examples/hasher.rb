@@ -56,9 +56,9 @@ end
 #
 # Run the pipeline and stop it on `SIGINT` or after 10s
 #
-cancellation = BM::Cancellation.signal('Signal').then do |(signal, control)|
-  Signal.trap('INT') { Thread.new { control.cancel } }
-  signal.with_deadline('Timeout', seconds_from_now: 10)
+cancellation = BM::Cancellation.cancel('Signal').then do |(cancel, control)|
+  Signal.trap('INT') { control.done }
+  cancel.with_timeout('Timeout', seconds: 10)
 end
 
 pp ticker(cancellation)

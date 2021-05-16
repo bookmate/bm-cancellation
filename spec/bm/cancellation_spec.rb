@@ -2,6 +2,7 @@
 
 RSpec.describe BM::Cancellation do
   it 'has a version number' do
-    expect(Bm::Cancellation::VERSION).not_to be nil
+    digit = '\d+'
+    expect(BM::Cancellation::VERSION).to match(/\A#{digit}\.#{digit}\.#{digit}\z/)
   end
 end

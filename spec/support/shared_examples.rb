@@ -8,7 +8,9 @@ RSpec.shared_examples 'combines into an Either' do
     let(:an_either) { a_left.or_else(a_right) }
 
     it 'combines with a second cancellation' do
-      expect(an_either).to be_kind_of(BM::Cancellation).and have_attributes(left: a_left, right: a_right)
+      expect(an_either).to be_frozen.and \
+        be_kind_of(BM::Cancellation).and \
+          have_attributes(left: a_left, right: a_right)
     end
   end
 
@@ -16,8 +18,21 @@ RSpec.shared_examples 'combines into an Either' do
     let(:an_either) { a_left | a_right }
 
     it 'combines with a second cancellation' do
-      expect(an_either).to be_kind_of(BM::Cancellation).and have_attributes(left: a_left, right: a_right)
+      expect(an_either).to be_frozen.and \
+        be_kind_of(BM::Cancellation).and \
+          have_attributes(left: a_left, right: a_right)
     end
+  end
+end
+
+RSpec.shared_examples 'combines with a timeout' do
+  let(:an_either) { a_left.with_timeout('Right', seconds: 2) }
+  let(:a_left) { subject }
+
+  it 'returns an either' do
+    expect(an_either).to be_frozen.and \
+      be_kind_of(BM::Cancellation).and \
+        have_attributes(left: a_left, right: be_kind_of(BM::Cancellation::Deadline))
   end
 end
 

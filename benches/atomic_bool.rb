@@ -22,9 +22,11 @@ def iter_using_cancellation(iterations, flag: nil)
   end
 end
 
-def threads_iter_using_concurrent_ruby(iterations, threads)
+def threads_using_concurrent_ruby(iterations, threads)
   ths = []
   flag = Concurrent::AtomicBoolean.new(false)
+  iterations /= threads
+
   threads.times do
     ths << Thread.new { iter_using_concurrent_ruby(iterations, flag: flag) }
   end
@@ -32,9 +34,11 @@ def threads_iter_using_concurrent_ruby(iterations, threads)
   ths.each(&:join)
 end
 
-def threads_iter_using_cancellation(iterations, threads)
+def threads_using_cancellation(iterations, threads)
   ths = []
   flag = BM::Cancellation::AtomicBool.new(false)
+  iterations /= threads
+
   threads.times do
     ths << Thread.new { iter_using_cancellation(iterations, flag: flag) }
   end
@@ -52,13 +56,17 @@ end
 def bench
   iterations = 1_000_000
 
-  Benchmark.bm(30) do |x|
-    x.report('concurrent-ruby:') { iter_using_concurrent_ruby(iterations) }
-    x.report('cancellation-atomic:') { iter_using_cancellation(iterations) }
+  Benchmark.bm(40) do |x|
+    x.report('Concurrent::AtomicBoolean') { iter_using_concurrent_ruby(iterations) }
+    x.report('BM::Cancellation::AtomicBool') { iter_using_cancellation(iterations) }
 
-    [2, 4].each do |threads|
-      x.report("concurrent-ruby-#{threads}-threads:") { threads_iter_using_concurrent_ruby(iterations, threads) }
-      x.report("cancellation-atomic-#{threads}-threads:") { threads_iter_using_cancellation(iterations, threads) }
+    [2, 4, 8].each do |threads|
+      x.report("Concurrent::AtomicBoolean    [#{threads} threads]") do
+        threads_using_concurrent_ruby(iterations, threads)
+      end
+      x.report("BM::Cancellation::AtomicBool [#{threads} threads]") do
+        threads_using_cancellation(iterations, threads)
+      end
     end
   end
 end

@@ -22,17 +22,17 @@ module BM
         super()
         @left = left
         @right = right
-        @name = "(#{left.name} | #{right.name})".freeze
+        @name = "(#{left.name} | #{right.name})"
       end
 
-      # Checks that either of left or right are cancelled
+      # Is any of the left or the right cancellations are cancelled
       #
       # @return [Boolean]
       def cancelled?
         @left.cancelled? || @right.cancelled?
       end
 
-      # Checks that either of left or right are cancelled
+      # Checks that any of left or right cancellations are cancelled
       #
       # @raise [ExceptionCancelled] when the one of left or right cancellations are cancelled
       # @return [nil]
@@ -40,7 +40,7 @@ module BM
         @left.check! || @right.check!
       end
 
-      # Returns a minimum value of left and right expirations
+      # Returns a minimum value of the left and the right expirations
       #
       # @return [Float]
       def expires_after
@@ -49,7 +49,7 @@ module BM
 
       # The name is depending on what cancellation is cancelled.
       #
-      # If it's right return right's name or if it's left return left's name,
+      # If the right return a right's name or if it's the left return a left's name,
       # otherwise return a combined name.
       #
       # @return [String]

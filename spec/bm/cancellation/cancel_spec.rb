@@ -41,4 +41,5 @@ RSpec.describe BM::Cancellation::Cancel do
 
   it_behaves_like 'when a cancellation has created by the factory', name: 'Test'
   it_behaves_like 'combines into an Either'
+  it_behaves_like 'combines with a timeout'
 end
