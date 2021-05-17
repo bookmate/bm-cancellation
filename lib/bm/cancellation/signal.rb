@@ -5,22 +5,30 @@ module BM
     # Signals a cancel event to associated cancellation
     #
     # @example Usage
-    #   cancellation, control = BM::Cancellation.cancel('MyWork')
+    #   cancellation, control = BM::Cancellation.new
     #   Signal.trap('INT', &control)
     #
     #   do_work until cancellation.cancelled?
+    #
+    # @!attribute cancellation [r]
+    #   @return [BM::Cancellation]
     class Control
+      attr_reader :cancellation
+
       # @api private
       def initialize
         @atomic = AtomicBool.new(false)
+        @cancellation = Signal.new(@atomic)
+        @cancellation = yield @cancellation if block_given?
+        @cancellation.freeze
       end
 
       # Destructing to an array
       #
-      # @return [(Control, AtomicBool)]
+      # @return [(Cancellation, Control)]
       # @api private
       def to_ary
-        [self, @atomic]
+        [cancellation, self]
       end
 
       # Converts to proc
@@ -46,23 +54,17 @@ module BM
     # has done.
     #
     # @example Usage
-    #   cancellation, control = BM::Cancellation.cancel('MyWork')
+    #   cancellation, control = BM::Cancellation.new
     #   Signal.trap('INT', &control)
     #
     #   do_work until cancellation.cancelled?
-    #
-    # @attr [String] name of the cancellation
-    class Cancel
+    class Signal
       include Cancellation
 
-      attr_reader :name
-
-      # @param name [String]
       # @param atomic [AtomicBool]
       #
       # @api private
-      def initialize(name:, atomic:)
-        @name = name.freeze
+      def initialize(atomic)
         @atomic = atomic
       end
 
@@ -80,7 +82,7 @@ module BM
       def check!
         return unless cancelled?
 
-        raise ExecutionCancelled, "Execution [#{name}] cancelled"
+        raise ExecutionCancelled, 'Execution cancelled by signal'
       end
     end
   end

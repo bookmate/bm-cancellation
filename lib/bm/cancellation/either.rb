@@ -23,7 +23,6 @@ module BM
       def initialize(left:, right:)
         @left = left
         @right = right
-        @name = "(#{left.name} | #{right.name})"
       end
 
       # Is any of the left or the right cancellations are cancelled
@@ -46,17 +45,6 @@ module BM
       # @return [Float]
       def expires_after
         [@left.expires_after, @right.expires_after].min
-      end
-
-      # The name is depending on what cancellation is cancelled. If the right return a right's name
-      # or if it's the left return a left's name, otherwise return a combined name.
-      #
-      # @return [String]
-      def name
-        return @right.name if @right.cancelled? # __important__ the right is first
-        return @left.name if @left.cancelled?   # the left is second
-
-        @name
       end
     end
   end

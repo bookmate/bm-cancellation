@@ -17,7 +17,7 @@ def ticker(cancellation)
       stream.yield(number)
     end
 
-    puts "ticker interrupted by [#{cancellation.name}]"
+    puts 'ticker interrupted'
   end
 end
 
@@ -27,10 +27,7 @@ end
 # @return [Lambda]
 def reader(cancellation)
   lambda do |tick|
-    if cancellation.cancelled?
-      puts "reader interrupted by [#{cancellation.name}]"
-      next
-    end
+    next puts('reader interrupted') if cancellation.cancelled?
 
     data = File.read('/dev/urandom', 1024).tap { sleep 0.2 }
     [tick, data]
@@ -43,10 +40,7 @@ end
 # @return [Lambda]
 def hasher(cancellation)
   lambda do |(tick, chunk)|
-    if cancellation.cancelled?
-      puts "hasher interrupted by [#{cancellation.name}]"
-      next
-    end
+    next puts('hasher interrupted') if cancellation.cancelled?
 
     digest = Digest::SHA256.hexdigest(chunk).tap { sleep 0.1 }
     [tick, digest]
@@ -56,9 +50,9 @@ end
 #
 # Run the pipeline and stop it on `SIGINT` or after 10s
 #
-cancellation = BM::Cancellation.cancel('Signal').then do |(cancel, control)|
+cancellation = BM::Cancellation.new.then do |(cancel, control)|
   Signal.trap('INT', &control)
-  cancel.with_timeout('Timeout', seconds: 10)
+  cancel.timeout(seconds: 5)
 end
 
 pp ticker(cancellation)

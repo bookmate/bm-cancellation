@@ -5,11 +5,11 @@ module BM
     # A cancellation object that expires after certain period of time.
     #
     # @example Usage
-    #   timeout = BM::Cancellation.timeout('MyWork', seconds: seconds)
+    #   timeout = BM::Cancellation.timeout(seconds: seconds)
     #   do_work until timeout.expired?
     #
     # @example Joins with another cancellation
-    #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
+    #   cancellation.timeout(seconds: 5).then do |timeout|
     #     do_work until timeout.expired?
     #   end
     #
@@ -17,16 +17,11 @@ module BM
     class Deadline
       include Cancellation
 
-      attr_reader :name
-
-      # @param name [String]
       # @param seconds_from_now [Numeric]
       # @param clock [#time]
       #
       # @api private
-      def initialize(name:, seconds_from_now:, clock: Clock)
-        super()
-        @name = name.freeze
+      def initialize(seconds_from_now:, clock: Clock)
         @after = clock.time + seconds_from_now.to_f
         @seconds_from_now = seconds_from_now.to_f
         @clock = clock
@@ -47,7 +42,7 @@ module BM
       def check!
         return unless cancelled?
 
-        raise DeadlineExpired, "Deadline [#{@name}] expired after #{@seconds_from_now.round(2)}s"
+        raise DeadlineExpired, "Deadline expired after #{@seconds_from_now.round(2)}s"
       end
 
       # Returns a number of remaining seconds for this deadline, if the deadline is

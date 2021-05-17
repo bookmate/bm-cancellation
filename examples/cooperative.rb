@@ -15,8 +15,7 @@ def go_until_cancelled(cancellation, name, channel)
   Concurrent::Channel.go do
     yield until cancellation.cancelled?
 
-    puts "#{name} interrupted by [#{cancellation.name}]"
-    channel.close
+    channel.close.tap { puts "#{name} interrupted" }
   end
   channel
 end
@@ -68,9 +67,9 @@ end
 #
 # Run the pipeline and stop it on `SIGINT` or after 10s
 #
-cancellation = BM::Cancellation.cancel('Signal').then do |(cancel, control)|
+cancellation = BM::Cancellation.new.then do |(cancel, control)|
   Signal.trap('INT', &control)
-  cancel.with_timeout('Timeout', seconds: 10)
+  cancel.timeout(seconds: 5)
 end
 
 capacity = 10

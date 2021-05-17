@@ -12,6 +12,9 @@ module BM
     # The number of seconds in the one year
     EXPIRES_AFTER_MAX = (365 * 24 * 3_600).to_f
 
+    # TLS key for storing and retrieving the current cancellation
+    THREAD_KEY = 'BM::Cancellation'
+
     # Is the cancellation cancelled
     #
     # @return [Boolean]
@@ -22,16 +25,23 @@ module BM
     # Combines the cancellation with another that expired after given seconds.
     #
     # @example Usage with another cancellation
-    #   cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|
+    #   cancellation.timeout(seconds: 5).then do |timeout|
     #     do_work until timeout.expired?
     #   end
     #
-    # @param name [String] is a timeout's name
     # @param seconds [Numeric] is a number of seconds when timeout becomes expired
     #
     # @return [Cancellation]
-    def with_timeout(name, seconds:)
-      self | Cancellation.timeout(name, seconds: seconds)
+    def timeout(seconds:)
+      self | Cancellation.timeout(seconds: seconds)
+    end
+
+    # Creates a new cancellation that resolved by signal and joins it with the current
+    # cancellation
+    #
+    # @return [Control]
+    def new
+      Control.new { self | _1 }.freeze
     end
 
     # Combines the cancellation with another using {Either}
@@ -60,6 +70,38 @@ module BM
     # @return [Float]
     def expires_after
       EXPIRES_AFTER_MAX
+    end
+
+    # Stores the current cancellation in the current thread, invokes a given block and
+    # then cleanup the current cancellation from the thread
+    #
+    # @see BM::Cancellation.current
+    def using
+      return unless block_given?
+
+      before = Thread.current[THREAD_KEY]
+      begin
+        Thread.current[THREAD_KEY] = self
+        yield
+      ensure
+        Thread.current[THREAD_KEY] = before
+      end
+    end
+
+    # Returns the current cancellation that before stored in the current thread
+    #
+    # @return [BM::Cancellation]
+    # @raise [ArgumentError] when no cancellation found at thread locals
+    #
+    # @see BM::Cancellation#using
+    def self.current
+      Thread.current[THREAD_KEY] || raise(ArgumentError, 'No cancellation found in the current thread')
+    end
+
+    # Checks that a cancellation is exist in the thread locals
+    # @return [Boolean]
+    def self.current?
+      !!Thread.current[THREAD_KEY]
     end
   end
 end

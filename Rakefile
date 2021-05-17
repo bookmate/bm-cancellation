@@ -28,8 +28,12 @@ end
 
 task default: %i[spec]
 
-task ci: %i[rubocop spec]
+task ci: %i[rubocop spec benches examples]
 
-task :bench do
-  sh 'ruby benches/atomic_bool.rb'
+task :benches do
+  Dir['benches/*.rb'].each { sh "ruby #{_1}" }
+end
+
+task :examples do
+  Dir['examples/*.rb'].each { sh "ruby #{_1}" }
 end

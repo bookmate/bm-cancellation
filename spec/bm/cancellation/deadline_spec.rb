@@ -3,7 +3,7 @@
 require 'bm/cancellation'
 
 RSpec.describe BM::Cancellation::Deadline do
-  subject(:deadline) { BM::Cancellation.timeout('Test', seconds: timeout, clock: clock) }
+  subject(:deadline) { BM::Cancellation.timeout(seconds: timeout, clock: clock) }
 
   let(:timeout) { 2 }
   let(:clock) { Struct.new(:time).new(0) }
@@ -26,7 +26,7 @@ RSpec.describe BM::Cancellation::Deadline do
     it 'raises when a cancellation cancelled' do
       expect(deadline.check!).to be_nil
       clock.time = timeout + 1
-      expect { deadline.check! }.to raise_error(expired, 'Deadline [Test] expired after 2.0s')
+      expect { deadline.check! }.to raise_error(expired, 'Deadline expired after 2.0s')
     end
   end
 
@@ -36,7 +36,8 @@ RSpec.describe BM::Cancellation::Deadline do
     end
   end
 
-  it_behaves_like 'when a cancellation has created by the factory', name: 'Test'
+  it_behaves_like 'when a cancellation has created by the factory'
   it_behaves_like 'combines into an Either'
   it_behaves_like 'combines with a timeout'
+  it_behaves_like 'combines with a signal'
 end
