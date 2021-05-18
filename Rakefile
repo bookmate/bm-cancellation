@@ -28,7 +28,7 @@ end
 
 task default: %i[spec]
 
-task ci: %i[rubocop compile spec benches examples]
+task ci: %i[rubocop compile spec benches]
 
 task :benches do
   Dir['benches/*.rb'].each { sh "ruby #{_1}" }

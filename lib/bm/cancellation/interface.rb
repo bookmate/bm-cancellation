@@ -6,6 +6,16 @@ module BM
   # @!attribute reason [r]
   #   Is an cancellation reason (by signal or by timeout) must be implemented on derived classes
   #   @return [String]
+  #
+  # @!method cancelled?
+  #   Is the cancellation cancelled
+  #   @return [Boolean]
+  #
+  # @!method check!
+  #   Checks that the current cancellation is cancelled or not
+  #
+  #   @raise [ExecutionCancelled] when the cancellation is cancelled
+  #   @return [nil]
   module Cancellation
     # Raised by {Cancellation#check!} when a cancellation is cancelled
     ExecutionCancelled = Class.new(RuntimeError)
@@ -18,13 +28,6 @@ module BM
 
     # TLS key for storing and retrieving the current cancellation
     THREAD_KEY = 'BM::Cancellation'
-
-    # Is the cancellation cancelled
-    #
-    # @return [Boolean]
-    def cancelled?
-      false
-    end
 
     # Combines the cancellation with another that expired after given seconds.
     #
@@ -56,14 +59,6 @@ module BM
       Either.new(left: self, right: other).freeze
     end
     alias | or_else
-
-    # Checks that the current cancellation is cancelled or not
-    #
-    # @raise [ExecutionCancelled] when the cancellation is cancelled
-    # @return [nil]
-    def check!
-      nil
-    end
 
     # Returns a number of remaining seconds for this cancellation,
     #
