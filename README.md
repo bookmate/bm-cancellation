@@ -22,17 +22,17 @@ Or install it yourself as:
 
 Works until a `SIGINT` signal received:
 ```ruby
-cancellation, control = BM::Cancellation.cancel('MyWork')
+cancellation, control = BM::Cancellation.new
 Signal.trap('INT', &control)
 do_work until cancellation.cancelled?
 ```
 
 Works until a `SIGINT` signal received or a timeout expired:
 ```ruby
-cancellation, control = BM::Cancellation.cancel('MyWork')
+cancellation, control = BM::Cancellation.new
 Signal.trap('INT', &control)
 
-cancellation.with_timeout('MyWork', seconds: 5).then do |timeout|   
+cancellation.timeout('MyWork', seconds: 5).then do |timeout|
   do_work until timeout.expired?
 end
 ```

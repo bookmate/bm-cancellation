@@ -37,6 +37,7 @@ module BM
       def cancelled?
         @left.cancelled? || @right.cancelled?
       end
+      alias expired? cancelled?
 
       # Checks that any of left or right cancellations are cancelled
       #
