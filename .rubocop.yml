@@ -1,0 +1,11 @@
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/bm/**/*_spec.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "benches/*.rb"
