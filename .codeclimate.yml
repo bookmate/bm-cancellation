@@ -40,3 +40,7 @@ plugins:
     enabled: true
     exclude_patterns:
       - 'spec/**/*.rb'
+
+exclude_patterns:
+  - 'examples/'
+  - 'benches/'
