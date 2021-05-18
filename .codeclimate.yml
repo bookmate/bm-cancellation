@@ -27,20 +27,15 @@ plugins:
     enabled: false
   flog:
     enabled: true
-    exclude_patterns:
-      - 'spec/'
   reek:
     enabled: true
-    exclude_patterns:
-      - 'spec/'
   rubocop:
     enabled: true
     channel: rubocop-1-10-0
   duplication:
     enabled: true
-    exclude_patterns:
-      - 'spec/**/*.rb'
 
 exclude_patterns:
   - 'examples/'
   - 'benches/'
+  - 'spec/'
