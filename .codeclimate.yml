@@ -1,4 +1,42 @@
+checks:
+  argument-count:
+    enabled: true
+  complex-logic:
+    enabled: true
+  file-lines:
+    enabled: true
+  method-complexity:
+    enabled: true
+  method-count:
+    enabled: false # rubocop checks this
+  method-lines:
+    enabled: false # rubocop checks this
+  nested-control-flow:
+    enabled: true
+  return-statements:
+    enabled: true
+  similar-code:
+    enabled: true
+  identical-code:
+    enabled: true
+
 plugins:
+  brakeman:
+    enabled: false
+  bundler-audit:
+    enabled: false
+  flog:
+    enabled: true
+    exclude_patterns:
+      - 'spec/'
+  reek:
+    enabled: true
+    exclude_patterns:
+      - 'spec/'
   rubocop:
     enabled: true
     channel: rubocop-1-10-0
+  duplication:
+    enabled: true
+    exclude_patterns:
+      - 'spec/**/*.rb'
