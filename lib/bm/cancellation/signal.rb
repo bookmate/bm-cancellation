@@ -82,7 +82,12 @@ module BM
       def check!
         return unless cancelled?
 
-        raise ExecutionCancelled, 'Execution cancelled by signal'
+        raise ExecutionCancelled, reason
+      end
+
+      # @return [String]
+      def reason
+        'Execution cancelled by signal'
       end
     end
   end

@@ -14,7 +14,7 @@ module BM
     class Either
       include Cancellation
 
-      attr_reader :left, :right
+      attr_reader :left, :right, :reason
 
       # @param left [Cancellation]
       # @param right [Cancellation]
@@ -23,6 +23,12 @@ module BM
       def initialize(left:, right:)
         @left = left
         @right = right
+
+        @reason = if left.reason == right.reason
+                    left.reason
+                  else
+                    "Either of [#{left.reason}] or [#{right.reason}]"
+                  end
       end
 
       # Is any of the left or the right cancellations are cancelled

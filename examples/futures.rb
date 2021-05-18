@@ -6,7 +6,7 @@ require 'concurrent'
 
 def checked(cancellation, semaphore)
   semaphore.acquire
-  return :cancelled if cancellation.cancelled?
+  return cancellation.reason if cancellation.cancelled?
 
   yield
 ensure

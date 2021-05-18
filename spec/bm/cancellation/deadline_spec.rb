@@ -36,6 +36,12 @@ RSpec.describe BM::Cancellation::Deadline do
     end
   end
 
+  describe '#reason' do
+    it 'returns a string with timeout value' do
+      expect(deadline.reason).to eq('Deadline expired after 2.0s')
+    end
+  end
+
   it_behaves_like 'when a cancellation has created by the factory'
   it_behaves_like 'combines into an Either'
   it_behaves_like 'combines with a timeout'

@@ -2,6 +2,10 @@
 
 module BM
   # Interface methods for cancellations
+  #
+  # @!attribute reason [r]
+  #   Is an cancellation reason (by signal or by timeout) must be implemented on derived classes
+  #   @return [String]
   module Cancellation
     # Raised by {Cancellation#check!} when a cancellation is cancelled
     ExecutionCancelled = Class.new(RuntimeError)

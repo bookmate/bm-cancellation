@@ -36,7 +36,7 @@ module BM
       #     do_work until timeout.expired?
       #   end
       #
-      # @param seconds [Numeric] is a number seconds after the timeout will be expired
+      # @param seconds [Float, Integer] is a number seconds after the timeout will be expired
       # @param clock [#time] override a time source (non public)
       # @return [Cancellation]
       def timeout(seconds:, clock: Deadline::Clock)

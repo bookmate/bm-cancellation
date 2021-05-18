@@ -38,6 +38,12 @@ RSpec.describe BM::Cancellation::Signal do
     end
   end
 
+  describe '#reason' do
+    it 'returns a constant string' do
+      expect(signal.reason).to eq('Execution cancelled by signal')
+    end
+  end
+
   it_behaves_like 'when a cancellation has created by the factory'
   it_behaves_like 'combines into an Either'
   it_behaves_like 'combines with a timeout'

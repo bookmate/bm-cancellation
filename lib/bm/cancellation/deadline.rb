@@ -17,6 +17,8 @@ module BM
     class Deadline
       include Cancellation
 
+      attr_reader :reason
+
       # @param seconds_from_now [Numeric]
       # @param clock [#time]
       #
@@ -25,6 +27,7 @@ module BM
         @after = clock.time + seconds_from_now.to_f
         @seconds_from_now = seconds_from_now.to_f
         @clock = clock
+        @reason = "Deadline expired after #{@seconds_from_now.round(2)}s"
       end
 
       # Is the current deadline expired
@@ -42,7 +45,7 @@ module BM
       def check!
         return unless cancelled?
 
-        raise DeadlineExpired, "Deadline expired after #{@seconds_from_now.round(2)}s"
+        raise DeadlineExpired, reason
       end
 
       # Returns a number of remaining seconds for this deadline, if the deadline is
