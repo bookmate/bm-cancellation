@@ -7,10 +7,6 @@
 /spec/reports/
 /tmp/
 Gemfile.lock
-ext/bm_cancellation_atomic_bool/*
-!ext/bm_cancellation_atomic_bool/*.c
-!ext/bm_cancellation_atomic_bool/*.rb
-lib/bm_cancellation_atomic_bool
 
 # rspec failure tracking
 .rspec_status
