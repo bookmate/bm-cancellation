@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require 'concurrent'
+
+if RUBY_ENGINE == 'ruby' && !Concurrent.const_defined?(:CAtomicBoolean)
+  warn '[PERFORMANCE] The gem "concurrent-ruby-ext" is strongly recommended to install' \
+       ' to avoid performance penalty of BM::Cancellation'
+end
+
 module BM
   module Cancellation
     # Signals a cancel event to associated cancellation
@@ -17,7 +24,7 @@ module BM
 
       # @api private
       def initialize
-        @atomic = AtomicBool.new(false)
+        @atomic = Concurrent::AtomicBoolean.new(false)
         @cancellation = Signal.new(@atomic)
         @cancellation = yield @cancellation if block_given?
         @cancellation.freeze
@@ -46,7 +53,7 @@ module BM
       #
       # @return [Boolean] true when invoked the 1st time
       def done
-        @atomic.swap(false, true)
+        @atomic.make_true
       end
     end
 
@@ -61,7 +68,7 @@ module BM
     class Signal
       include Cancellation
 
-      # @param atomic [AtomicBool]
+      # @param atomic [Concurrent::AtomicBoolean]
       #
       # @api private
       def initialize(atomic)
@@ -72,7 +79,7 @@ module BM
       #
       # @return [Boolean]
       def cancelled?
-        @atomic.fetch
+        @atomic.true?
       end
 
       # Checks that the current cancellation is cancelled

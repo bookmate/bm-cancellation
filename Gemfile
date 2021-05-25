@@ -6,7 +6,6 @@ gemspec
 
 gem 'nexus'
 gem 'rake', '~> 13.0'
-gem 'rake-compiler', '~> 1.1'
 
 group :docs do
   gem 'redcarpet', '~> 3.5'
@@ -23,8 +22,4 @@ group :tests do
   gem 'rubocop-rake', '= 0.5.1'
   gem 'rubocop-rspec', '= 2.3.0'
   gem 'simplecov', '= 0.21.2'
-end
-
-group :examples do
-  gem 'concurrent-ruby-edge', '~> 0.6.0'
 end

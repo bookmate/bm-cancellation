@@ -3,7 +3,6 @@
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
-require 'rake/extensiontask'
 require 'yard'
 
 RSpec::Core::RakeTask.new(:spec)
@@ -22,17 +21,9 @@ RuboCop::RakeTask.new :rubocop do |t|
   t.options = requires + formatters + out
 end
 
-Rake::ExtensionTask.new 'bm_cancellation_atomic_bool' do |ext|
-  ext.lib_dir = 'lib/bm_cancellation_atomic_bool'
-end
-
 task default: %i[spec]
 
-task ci: %i[rubocop spec benches]
-
-task :benches do
-  Dir['benches/*.rb'].each { sh "ruby #{_1}" }
-end
+task ci: %i[rubocop spec]
 
 task :examples do
   Dir['examples/*.rb'].each { sh "ruby #{_1}" }

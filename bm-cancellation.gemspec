@@ -30,4 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.extensions    = spec.files.grep(%r{/extconf\.rb\Z})
   spec.require_paths = ['lib']
+
+  spec.add_dependency 'concurrent-ruby', '~> 1.1'
+  spec.add_development_dependency 'concurrent-ruby-ext', '~> 1.1'
 end

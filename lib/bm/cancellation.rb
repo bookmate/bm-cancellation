@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'bm/cancellation/version'
-require 'bm/cancellation/atomic_bool'
 require 'bm/cancellation/interface'
 require 'bm/cancellation/signal'
 require 'bm/cancellation/deadline'
